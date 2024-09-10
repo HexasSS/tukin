@@ -17,12 +17,15 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->unsignedBigInteger('sat_juru_bayar_id')->nullable();
+            $table->string('sat_juru_bayar_id')->nullable(); // Adjusted to string
             $table->enum('role', ['superadmin', 'admin']);
             $table->rememberToken();
             $table->timestamps();
 
-            $table->foreign('sat_juru_bayar_id')->references('id')->on('juru_bayars')->onDelete('set null');
+            $table->foreign('sat_juru_bayar_id')
+                ->references('sat_juru_bayar')
+                ->on('juru_bayars')
+                ->onDelete('set null');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

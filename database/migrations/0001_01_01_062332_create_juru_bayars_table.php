@@ -12,13 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('juru_bayars', function (Blueprint $table) {
-            $table->id();
-            $table->string('sat_juru_bayar')->unique(); // e.g., "347306"
-            $table->string('nama_sat_juru_bayar'); // e.g., "SATHANLAN LANUD IWJ"
-            $table->string('pekas'); // e.g., "404"
-            $table->string('satker'); // e.g., "0404"
-            $table->string('anak_satker'); // e.g., "21"
-            $table->string('kd_satker'); // e.g., "344837"
+            $table->string('sat_juru_bayar')->unique(); // Unique string identifier
+            $table->string('nama_sat_juru_bayar'); // Name of the unit
+            $table->string('pekas'); // Pekas code
+            $table->string('satker'); // Satker code
+            $table->string('anak_satker'); // Anak Satker code
+            $table->string('kd_satker'); // Kd Satker code
             $table->timestamps();
         });
     }
