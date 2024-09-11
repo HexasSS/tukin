@@ -19,6 +19,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('files', FileController::class);
+Route::get('/files/{file}/download', [FileController::class, 'download'])->name('files.download');
+
 
 
 require __DIR__ . '/auth.php';
