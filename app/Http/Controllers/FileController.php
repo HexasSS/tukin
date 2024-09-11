@@ -1,7 +1,5 @@
 <?php
 
-// app/Http/Controllers/FileController.php
-
 namespace App\Http\Controllers;
 
 use App\Models\File;
@@ -12,11 +10,10 @@ class FileController extends Controller
 {
     public function index()
     {
-        // Paginate the files to allow pagination links in the view
-        $files = File::with('user', 'juruBayar')->paginate(10); // Adjust the number per page as needed
+        // Use pagination instead of get() to enable links() method in the view
+        $files = File::with('user', 'juruBayar')->paginate(10);
         return view('files.index', compact('files'));
     }
-
 
     public function create()
     {
@@ -42,16 +39,37 @@ class FileController extends Controller
         return redirect()->route('files.index')->with('success', 'File uploaded successfully!');
     }
 
+    // Add this method to your FileController
+    public function show($id)
+    {
+        // Find the file by ID or fail if not found
+        $file = File::with('user', 'juruBayar')->findOrFail($id);
+
+        // Return a view to display file details
+        return view('files.show', compact('file'));
+    }
+
     public function download($id)
     {
         $file = File::findOrFail($id);
+
+        // Add a check to ensure the file exists in storage before attempting to download
+        if (!Storage::exists($file->file_path)) {
+            return redirect()->route('files.index')->withErrors('File not found.');
+        }
+
         return Storage::download($file->file_path);
     }
 
     public function destroy($id)
     {
         $file = File::findOrFail($id);
-        Storage::delete($file->file_path);
+
+        // Ensure file exists before deleting
+        if (Storage::exists($file->file_path)) {
+            Storage::delete($file->file_path);
+        }
+
         $file->delete();
 
         return redirect()->route('files.index')->with('success', 'File deleted successfully!');
