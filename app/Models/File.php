@@ -1,21 +1,24 @@
 <?php
 
-// app/Models/File.php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\JuruBayar;
 
 class File extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'uploaded_at' => 'datetime',
+    ];
+
     protected $fillable = [
         'file_path',
-        'uploaded_at',
         'user_id',
-        'sat_juru_bayar'
+        'sat_juru_bayar',
     ];
 
     public function user()

@@ -12,9 +12,11 @@ class FileController extends Controller
 {
     public function index()
     {
-        $files = File::with('user', 'juruBayar')->get();
+        // Paginate the files to allow pagination links in the view
+        $files = File::with('user', 'juruBayar')->paginate(10); // Adjust the number per page as needed
         return view('files.index', compact('files'));
     }
+
 
     public function create()
     {
