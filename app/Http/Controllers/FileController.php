@@ -5,15 +5,42 @@ namespace App\Http\Controllers;
 use App\Models\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use App\Models\JuruBayar;
+use App\Models\User;
 
 class FileController extends Controller
 {
     public function index()
     {
-        // Use pagination instead of get() to enable links() method in the view
-        $files = File::with('user', 'juruBayar')->paginate(10);
-        return view('files.index', compact('files'));
+        $user = Auth::user();
+
+        // Debugging: dump and die to inspect user and their role
+        // dd($user);  // Uncomment to inspect user details
+
+        if ($user->role === 'superadmin') {
+            $files = File::with('user', 'juruBayar')->paginate(10);
+
+            // Add return statement for superadmin
+            return view('files.index', [
+                'files' => $files,
+                'userSatJuruBayar' => $user->sat_juru_bayar_id, // This line is optional for superadmin
+            ]);
+        } else {
+            $files = File::where('sat_juru_bayar', $user->sat_juru_bayar_id)
+                ->with('user', 'juruBayar')
+                ->paginate(10);
+
+            return view('files.index', [
+                'files' => $files,
+                'userSatJuruBayar' => $user->sat_juru_bayar_id,
+            ]);
+        }
     }
+
+
+
 
     public function create()
     {

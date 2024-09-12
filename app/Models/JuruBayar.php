@@ -26,4 +26,8 @@ class JuruBayar extends Model
     {
         return $this->hasMany(User::class, 'sat_juru_bayar_id');
     }
+    public function files()
+    {
+        return $this->hasMany(File::class, 'sat_juru_bayar', 'sat_juru_bayar');
+    }
 }

@@ -1,4 +1,3 @@
-<!-- resources/views/files/index.blade.php -->
 <x-app-layout>
     <x-slot name="header">
         <h2 class="text-xl font-semibold leading-tight text-gray-800">
@@ -10,6 +9,8 @@
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
+                    <!-- Display the sat_juru_bayar for the current user -->
+                    <p class="text-gray-600">{{ __('Your Sat Juru Bayar: ') . $userSatJuruBayar }}</p>
 
                     <!-- Button to create a new file -->
                     <div class="mb-4">
@@ -28,7 +29,7 @@
                             <tr>
                                 <th class="px-4 py-2">{{ __('Nama File') }}</th>
                                 <th class="px-4 py-2">{{ __('Sat Juru Bayar') }}</th>
-                                <th class="px-4 py-2">{{ __('Diunggah Pada') }}</th> <!-- Changed td to th -->
+                                <th class="px-4 py-2">{{ __('Diunggah Pada') }}</th>
                                 <th class="px-4 py-2">{{ __('Aksi') }}</th>
                             </tr>
                         </thead>

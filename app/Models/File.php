@@ -12,13 +12,13 @@ class File extends Model
     use HasFactory;
 
     protected $casts = [
-        'uploaded_at' => 'datetime',
+        'uploaded_at' => 'datetime', // Ensures uploaded_at is treated as a DateTime object
     ];
 
     protected $fillable = [
         'file_path',
         'user_id',
-        'sat_juru_bayar',
+        'sat_juru_bayar'
     ];
 
     public function user()

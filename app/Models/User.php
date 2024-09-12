@@ -49,6 +49,6 @@ class User extends Authenticatable
      */
     public function juruBayar()
     {
-        return $this->belongsTo(JuruBayar::class, 'sat_juru_bayar_id');
+        return $this->belongsTo(JuruBayar::class, 'sat_juru_bayar_id', 'sat_juru_bayar');
     }
 }
