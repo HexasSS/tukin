@@ -28,7 +28,7 @@
                             <tr>
                                 <th class="px-4 py-2">{{ __('Nama File') }}</th>
                                 <th class="px-4 py-2">{{ __('Sat Juru Bayar') }}</th>
-                                <th class="px-4 py-2">{{ __('Diunggah Pada') }}</th>
+                                <th class="px-4 py-2">{{ __('Diunggah Pada') }}</th> <!-- Changed td to th -->
                                 <th class="px-4 py-2">{{ __('Aksi') }}</th>
                             </tr>
                         </thead>
@@ -37,7 +37,7 @@
                             <tr class="border-t">
                                 <td class="px-4 py-2">{{ $file->file_path }}</td>
                                 <td class="px-4 py-2">{{ $file->sat_juru_bayar }}</td>
-                                <td class="px-4 py-2">{{ $file->uploaded_at->format('d M Y') }}</td>
+                                <td class="px-4 py-2">{{ optional($file->uploaded_at)->format('d M Y') }}</td>
                                 <td class="px-4 py-2">
                                     <a href="{{ route('files.show', $file->id) }}" class="text-blue-500">{{ __('Lihat')
                                         }}</a> |
