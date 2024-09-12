@@ -59,7 +59,7 @@ class FileController extends Controller
         File::create([
             'file_path' => $filePath,
             'uploaded_at' => now(),  // Ensure this is set
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'sat_juru_bayar' => $request->input('sat_juru_bayar'),
         ]);
 

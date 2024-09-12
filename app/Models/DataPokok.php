@@ -9,6 +9,15 @@ class DataPokok extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'TMTTNI' => 'datetime',
+        'TMTPenyesuaian' => 'datetime',
+        'TanggalLahir' => 'datetime',
+        'TMTJabatan' => 'datetime',
+        'TanggalBuat' => 'datetime',
+        'TanggalEdit' => 'datetime',
+    ];
+
     protected $fillable = [
         'NRP',
         'Nama',
@@ -16,10 +25,7 @@ class DataPokok extends Model
         'PangkatTituler',
         'KelompokDPP',
         'AsalMasukan',
-        'TMTTNI',
-        'TMTPenyesuaian',
         'SatJuruBayar',
-        'TanggalLahir',
         'JenisKelamin',
         'StatusKawin',
         'JumlahAnak',
@@ -34,7 +40,6 @@ class DataPokok extends Model
         'JnsJab2',
         'EseJab2',
         'NamaJabatan',
-        'TMTJabatan',
         'Skorsing',
         'Kotji',
         'GantiRugi',
@@ -44,8 +49,6 @@ class DataPokok extends Model
         'SatOrganik',
         'Pekas',
         'Satker',
-        'TanggalBuat',
-        'TanggalEdit',
         'BuatOleh',
         'EditOleh',
         'BulanKumulatif',
