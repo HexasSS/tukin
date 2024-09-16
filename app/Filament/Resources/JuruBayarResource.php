@@ -67,41 +67,21 @@ class JuruBayarResource extends Resource
                     ->label('Nama Sat Juru Bayar')
                     ->sortable()
                     ->searchable(),
-
-                Tables\Columns\TextColumn::make('pekas')
-                    ->label('Pekas')
-                    ->sortable()
-                    ->searchable(),
-
-                Tables\Columns\TextColumn::make('satker')
-                    ->label('Satker')
-                    ->sortable()
-                    ->searchable(),
-
-                Tables\Columns\TextColumn::make('anak_satker')
-                    ->label('Anak Satker')
-                    ->sortable()
-                    ->searchable(),
-
-                Tables\Columns\TextColumn::make('kd_satker')
-                    ->label('Kode Satker')
-                    ->sortable()
-                    ->searchable(),
+                Tables\Columns\CheckboxColumn::make('has_uploaded')
+                    ->label('Sudah Upload')
+                    ->getStateUsing(function (JuruBayar $record) {
+                        // Check if the JuruBayar has uploaded a file this month
+                        return $record->files()
+                            ->whereMonth('uploaded_at', now()->month)
+                            ->exists();
+                    })
+                    ->disabled(),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('satker')
-                    ->label('Filter by Satker')
-                    ->options(JuruBayar::pluck('satker', 'satker')->toArray()),
-
-                Tables\Filters\SelectFilter::make('pekas')
-                    ->label('Filter by Pekas')
-                    ->options(JuruBayar::pluck('pekas', 'pekas')->toArray()),
+                // Optionally add filters here
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                // Optionally add view action
-                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
