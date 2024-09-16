@@ -10,6 +10,13 @@ class JuruBayar extends Model
 {
     use HasFactory;
 
+    // Declare the custom primary key if it's not 'id'
+    protected $primaryKey = 'sat_juru_bayar';
+
+    // If the primary key is not an auto-incrementing integer, specify this
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
         'sat_juru_bayar',
         'nama_sat_juru_bayar',
