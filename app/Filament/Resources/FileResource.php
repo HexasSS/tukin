@@ -9,8 +9,10 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Models\JuruBayar;
 use App\Models\File;
+use App\Jobs\ProcessExcelImport;
 
 class FileResource extends Resource
 {
@@ -56,6 +58,11 @@ class FileResource extends Resource
         // Automatically set the sat_juru_bayar_id for admins
         if (Auth::user()->role === 'admin') {
             $record->sat_juru_bayar = Auth::user()->sat_juru_bayar_id;
+        }
+
+        if ($record->file_path) {
+            // Dispatch the job to process the file
+            ProcessExcelImport::dispatch($record->file_path);
         }
     }
 
