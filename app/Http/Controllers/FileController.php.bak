@@ -1,0 +1,59 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use App\Models\File;
+use App\Models\User;
+use App\Models\JuruBayar;
+
+class FileController extends Controller
+{
+    public function store(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:pdf,xlsx,csv',
+            'sat_juru_bayar' => 'required|string|exists:juru_bayars,sat_juru_bayar',
+        ]);
+
+        // Store the file and get its path
+        $file = $request->file('file');
+        $filePath = $file->store('confidential/uploads', 'local'); // Use a private disk
+
+        // Encrypt the file if needed
+        // $encryptedFilePath = $this->encryptFile($filePath);
+
+        // Save file record to the database
+        File::create([
+            'file_path' => $filePath,
+            'uploaded_at' => now(),
+            'user_id' => Auth::id(),
+            'sat_juru_bayar' => $request->input('sat_juru_bayar'),
+        ]);
+
+        return redirect()->route('files.index')->with('success', 'File uploaded successfully!');
+    }
+
+    public function download($id)
+    {
+        $file = File::findOrFail($id);
+
+        // Ensure the file exists and user has permission to download
+        if (!Storage::disk('local')->exists($file->file_path)) {
+            return redirect()->route('files.index')->withErrors('File not found.');
+        }
+
+        // Generate a signed URL if needed
+        // $url = Storage::disk('local')->temporaryUrl($file->file_path, now()->addMinutes(5));
+
+        // Serve the file for download
+        return response()->download(Storage::disk('local')->path($file->file_path));
+    }
+
+    private function encryptFile($filePath)
+    {
+        // Implement encryption logic here if necessary
+    }
+}

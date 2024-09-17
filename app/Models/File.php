@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\JuruBayar;
 
@@ -11,16 +12,23 @@ class File extends Model
 {
     use HasFactory;
 
-    protected $casts = [
-        'uploaded_at' => 'datetime', // Ensures uploaded_at is treated as a DateTime object
-    ];
-
     protected $fillable = [
         'file_path',
         'user_id',
-        'sat_juru_bayar'
+        'sat_juru_bayar',
+        'uploaded_at',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($file) {
+            $file->user_id = Auth::id();
+        });
+    }
+
+    // Add relationships
     public function user()
     {
         return $this->belongsTo(User::class);

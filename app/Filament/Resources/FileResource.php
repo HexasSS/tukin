@@ -3,15 +3,14 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\FileResource\Pages;
-use App\Filament\Resources\FileResource\RelationManagers;
-use App\Models\File;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
+use App\Models\JuruBayar;
+use App\Models\File;
 
 class FileResource extends Resource
 {
@@ -23,60 +22,52 @@ class FileResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('file_path')
+                Forms\Components\FileUpload::make('file_path')
+                    ->label('Upload File')
+                    ->disk('local')
+                    ->directory('tunjangan-kinerja')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\DateTimePicker::make('uploaded_at'),
-                Forms\Components\TextInput::make('user_id')
+                    ->visible(fn() => Auth::user()->role === 'admin' || Auth::user()->role === 'superadmin'),
+
+                Forms\Components\Select::make('sat_juru_bayar')
+                    ->label('Juru Bayar')
+                    ->options(
+                        Auth::user()->role === 'admin'
+                            ? JuruBayar::where('sat_juru_bayar', Auth::user()->sat_juru_bayar_id)->pluck('nama_sat_juru_bayar', 'sat_juru_bayar')
+                            : JuruBayar::all()->pluck('nama_sat_juru_bayar', 'sat_juru_bayar')
+                    )
                     ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('sat_juru_bayar')
+                    ->default(fn() => Auth::user()->role === 'admin' ? Auth::user()->sat_juru_bayar_id : null),
+                // ->disabled(fn() => Auth::user()->role === 'admin'),
+
+                Forms\Components\DateTimePicker::make('uploaded_at')
+                    ->label('Uploaded At')
+                    ->default(now())
                     ->required()
-                    ->maxLength(255),
+                    ->readonly(fn() => Auth::user()->role === 'admin'), // readonly instead of disabled
             ]);
+    }
+
+    public static function beforeCreate($record): void
+    {
+        // Ensure the file is associated with the logged-in user
+        $record->user_id = Auth::id();
+
+        // Automatically set the sat_juru_bayar_id for admins
+        if (Auth::user()->role === 'admin') {
+            $record->sat_juru_bayar = Auth::user()->sat_juru_bayar_id;
+        }
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('file_path')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('uploaded_at')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('user_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('sat_juru_bayar')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Columns\TextColumn::make('file_path')->searchable(),
+                Tables\Columns\TextColumn::make('uploaded_at')->dateTime()->sortable(),
+                Tables\Columns\TextColumn::make('user.name')->label('Uploaded by')->sortable(),
+                Tables\Columns\TextColumn::make('sat_juru_bayar')->label('Juru Bayar')->searchable(),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
     }
 
     public static function getPages(): array
