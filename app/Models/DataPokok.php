@@ -23,6 +23,7 @@ class DataPokok extends Model
     protected $keyType = 'string'; // Set to 'string' if the primary key is a string
 
     protected $fillable = [
+        'NRP',
         'Nama',
         'Pangkat',
         'PangkatTituler',
