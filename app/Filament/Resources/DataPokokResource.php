@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Exports\DataPokokExporter;
 use Filament\Tables\Actions\ExportAction;
+use Filament\Actions\Exports\Enums\ExportFormat;
 
 class DataPokokResource extends Resource
 {
@@ -519,6 +520,11 @@ class DataPokokResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ExportBulkAction::make()
+                        ->exporter(DataPokokExporter::class)
+                        ->formats([
+                            ExportFormat::Xlsx,
+                        ]),
                 ]),
             ]);
     }

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\File;
 use App\Models\User;
 use App\Models\JuruBayar;
+use Symfony\Component\HttpFoundation\Response;
 
 class FileController extends Controller
 {
@@ -36,20 +37,15 @@ class FileController extends Controller
         return redirect()->route('files.index')->with('success', 'File uploaded successfully!');
     }
 
-    public function download($id)
+    public function download(File $file)
     {
-        $file = File::findOrFail($id);
-
-        // Ensure the file exists and user has permission to download
+        // Ensure the file exists
         if (!Storage::disk('local')->exists($file->file_path)) {
-            return redirect()->route('files.index')->withErrors('File not found.');
+            abort(Response::HTTP_NOT_FOUND, 'File not found.');
         }
 
-        // Generate a signed URL if needed
-        // $url = Storage::disk('local')->temporaryUrl($file->file_path, now()->addMinutes(5));
-
-        // Serve the file for download
-        return response()->download(Storage::disk('local')->path($file->file_path));
+        // Download the file
+        return Storage::disk('local')->download($file->file_path);
     }
 
     private function encryptFile($filePath)

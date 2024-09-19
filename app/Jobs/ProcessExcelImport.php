@@ -4,29 +4,31 @@ namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Support\Facades\Storage;
 use Rap2hpoutre\FastExcel\FastExcel;
 use App\Models\DataPokok;
 use Carbon\Carbon;
 
 class ProcessExcelImport implements ShouldQueue
 {
-    use InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $filePath;
+    protected $filePath;
+    protected $userId;
 
     /**
      * Create a new job instance.
      *
-     * @param string $filePath
+     * @param  string  $filePath
+     * @param  int  $userId
      * @return void
      */
-    public function __construct($filePath)
+    public function __construct($filePath, $userId)
     {
         $this->filePath = $filePath;
+        $this->userId = $userId;
     }
 
     /**
@@ -36,9 +38,6 @@ class ProcessExcelImport implements ShouldQueue
      */
     public function handle()
     {
-        $filePath = Storage::disk('local')->path($this->filePath);
-
-        // Define the field mapping between Excel and database
         $fieldMapping = [
             'NRP' => 'NRP',
             'Nama' => 'Nama',
@@ -144,12 +143,11 @@ class ProcessExcelImport implements ShouldQueue
             'TEMPATLHR' => 'TEMPATLHR',
         ];
 
-        // Import and process the file
-        (new FastExcel)->import($filePath, function ($row) use ($fieldMapping) {
+        (new FastExcel)->import($this->filePath, function ($line) use ($fieldMapping) {
             // Map Excel fields to database fields
             $mappedRow = [];
             foreach ($fieldMapping as $excelField => $dbField) {
-                $mappedRow[$dbField] = !empty($row[$excelField]) ? $row[$excelField] : null;
+                $mappedRow[$dbField] = !empty($line[$excelField]) ? $line[$excelField] : null;
             }
 
             // Handle datetime fields and other data
@@ -160,8 +158,11 @@ class ProcessExcelImport implements ShouldQueue
             $mappedRow['TanggalBuat'] = !empty($mappedRow['TanggalBuat']) ? Carbon::parse($mappedRow['TanggalBuat']) : null;
             $mappedRow['TanggalEdit'] = !empty($mappedRow['TanggalEdit']) ? Carbon::parse($mappedRow['TanggalEdit']) : null;
 
-            // Insert or update the record
-            DataPokok::updateOrCreate(['NRP' => $mappedRow['NRP']], $mappedRow);
+            // Insert or update the record in the database
+            DataPokok::updateOrCreate(
+                ['NRP' => $mappedRow['NRP']], // Example unique field
+                $mappedRow
+            );
         });
     }
 }

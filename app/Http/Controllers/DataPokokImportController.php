@@ -24,8 +24,10 @@ class DataPokokImportController extends Controller
         return redirect()->route('files.index')->with('success', 'File imported successfully!');
     }
 
+
     private function importFile($filePath)
     {
+        dd($filePath);
         // Define the field mapping between Excel and database
         $fieldMapping = [
             'NRP' => 'NRP',
