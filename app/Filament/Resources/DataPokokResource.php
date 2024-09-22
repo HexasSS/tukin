@@ -27,6 +27,7 @@ class DataPokokResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('NRP')
+                    ->label('NRP/NIP')
                     ->numeric(),
                 Forms\Components\TextInput::make('Nama')
                     ->maxLength(255),
@@ -55,38 +56,64 @@ class DataPokokResource extends Resource
                 Forms\Components\TextInput::make('StatJabatan')
                     ->numeric(),
                 Forms\Components\TextInput::make('JenisJabatan')
+                    ->label('Jenis Jabatan Struktural')
                     ->numeric(),
                 Forms\Components\TextInput::make('EselonJabatan')
+                    ->label('Eselon Jabatan Struktural')
                     ->numeric(),
                 Forms\Components\TextInput::make('JnsJab2')
+                    ->label('Jenis Jabatan Fungsional')
                     ->numeric(),
                 Forms\Components\TextInput::make('EseJab2')
+                    ->label('Eselon Jabatan Fungsional')
                     ->numeric(),
                 Forms\Components\TextInput::make('NamaJabatan')
                     ->maxLength(255),
-                Forms\Components\DateTimePicker::make('TMTJabatan'),
+                Forms\Components\DateTimePicker::make('TMTJabatan')
+                    ->label('TMT Jabatan'),
                 Forms\Components\TextInput::make('SewaRumah')
                     ->numeric(),
                 Forms\Components\TextInput::make('Pekas')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('Gapok')
+                    ->label('Gaji Pokok')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('TGrade')
+                    ->label('Grade Tunjangan')
                     ->numeric(),
                 Forms\Components\TextInput::make('KdSatker')
+                    ->label('Kode Satker')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('KdAnakSatker')
+                    ->label('Kode Anak Satker')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('MKG')
+                    ->label('MKG')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('NPWP')
+                    ->label('NPWP')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('NAMA_REK')
+                    ->label('Nama Rekening')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('NAMA_BANK')
+                    ->label('Nama Bank')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('NO_REK')
+                    ->label('No. Rek')
                     ->maxLength(255),
+                Tables\Columns\TextColumn::make('SANDI')
+                    ->label('Sandi')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('KD_BANK_SPAN')
+                    ->label('Kode Bank Span')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('TELEPON')
+                    ->label('Telepon')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('TEMPATLHR')
+                    ->label('Tempat Lahir')
+                    ->searchable(),
             ]);
     }
 
@@ -113,9 +140,6 @@ class DataPokokResource extends Resource
                 Tables\Columns\TextColumn::make('AsalMasukan')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('TMTTNI')
-                    ->dateTime()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('SatJuruBayar')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('TanggalLahir')
@@ -133,9 +157,9 @@ class DataPokokResource extends Resource
                 Tables\Columns\TextColumn::make('JumlahTanggungan')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('StatPenghasilan')
-                    ->numeric()
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('StatPenghasilan')
+                //     ->numeric()
+                //     ->sortable(),
                 Tables\Columns\TextColumn::make('Korps')
                     ->numeric()
                     ->sortable(),
@@ -143,25 +167,30 @@ class DataPokokResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('JenisJabatan')
+                    ->label('Jenis Jabatan Struktural')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('EselonJabatan')
+                    ->label('Jenis Eselon Jabatan Struktural')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('JnsJab2')
+                    ->label('Jenis Jabatan Fungsional')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('EseJab2')
+                    ->label('Jenis Eselon Jabatan Fungsional')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('NamaJabatan')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('TMTJabatan')
+                    ->label('TMT Jabatan')
                     ->dateTime()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('SewaRumah')
-                    ->numeric()
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('SewaRumah')
+                //     ->numeric()
+                //     ->sortable(),
                 Tables\Columns\TextColumn::make('Pekas')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('StIrja')
@@ -190,25 +219,9 @@ class DataPokokResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('KD_BANK_SPAN')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('KD_SWIFT')
+                Tables\Columns\TextColumn::make('Telepon')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('KD_POS')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('KD_NEGARA')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('KD_KPPN')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('TIPE_SUP')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('KOTA')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('PROVINSI')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('NEGARA')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('KODE_NEGARA')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('KET')
+                Tables\Columns\TextColumn::make('TempatLahir')
                     ->searchable(),
             ])
             ->filters([
