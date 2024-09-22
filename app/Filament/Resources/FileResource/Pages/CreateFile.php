@@ -3,37 +3,30 @@
 namespace App\Filament\Resources\FileResource\Pages;
 
 use App\Filament\Resources\FileResource;
-use Filament\Pages\Actions;
-use Filament\Resources\Pages\CreateRecord;
 use App\Jobs\ProcessExcelImport;
+use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Facades\Storage;
 
 class CreateFile extends CreateRecord
 {
     protected static string $resource = FileResource::class;
 
-    // Override the create method with the correct signature
-    public function create(bool $another = false): void
+    protected function handleRecordCreation(array $data): \App\Models\File
     {
-        // Call parent create method to handle the default creation process
-        parent::create($another);
+        // Create the record first
+        $file = parent::handleRecordCreation($data);
 
-        // Dispatch the job to handle the import process
-        $this->dispatchImportJob();
-    }
+        // Process the uploaded file
+        if (!empty($data['file_path'])) {
+            $filePath = $data['file_path'];
 
-    protected function dispatchImportJob(): void
-    {
-        // Retrieve the created record
-        $record = $this->getRecord();
+            // Ensure the file is stored correctly
+            $fullPath = Storage::disk('local')->path($filePath);
 
-        // Ensure the file path and user ID are set correctly
-        $filePath = $record->file_path; // Adjust if needed
-        $userId = $record->user_id; // Adjust if needed
+            // Dispatch the job to process the file
+            ProcessExcelImport::dispatch($fullPath);
+        }
 
-        // Add delay if needed
-        $delay = now()->addSeconds(1);
-
-        // Dispatch the job to process the import
-        dispatch((new ProcessExcelImport($filePath, $userId))->delay($delay));
+        return $file;
     }
 }

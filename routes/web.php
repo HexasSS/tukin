@@ -34,7 +34,4 @@ Route::get('/import-progress', [ImportController::class, 'progress']);
 
 Route::get('/files/{file}/download', [FileController::class, 'download'])->name('files.download');
 
-Route::get('/admin/files', [FileController::class, 'index'])->name('admin.files');
-
-
 require __DIR__ . '/auth.php';

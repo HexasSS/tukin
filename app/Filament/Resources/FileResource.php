@@ -48,6 +48,7 @@ class FileResource extends Resource
             ]);
     }
 
+
     public static function table(Table $table): Table
     {
         return $table

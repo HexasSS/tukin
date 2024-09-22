@@ -1,35 +1,28 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Jobs;
 
-use Illuminate\Http\Request;
-use Rap2hpoutre\FastExcel\FastExcel;
 use App\Models\DataPokok;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Carbon\Carbon;
 
-class DataPokokImportController extends Controller
+class ApplicationsImportChunkJob implements ShouldQueue
 {
-    public function store(Request $request)
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    public $tries = 5;
+    protected $fieldMapping;
+
+    /**
+     * Create a new job instance.
+     */
+    public function __construct(public $chunk, public $file)
     {
-        $request->validate([
-            'file' => 'required|file|mimes:xlsx,csv',
-        ]);
-
-        // Store the file and get its path
-        $filePath = $request->file('file')->store('uploads');
-
-        // Import the file
-        $this->importFile(storage_path('app/' . $filePath));
-
-        return redirect()->route('files.index')->with('success', 'File imported successfully!');
-    }
-
-
-    private function importFile($filePath)
-    {
-        // dd($filePath);
-        // Define the field mapping between Excel and database
-        $fieldMapping = [
+        $this->fieldMapping = [
             'NRP' => 'NRP',
             'Nama' => 'Nama',
             'Pangkat' => 'Pangkat',
@@ -133,15 +126,21 @@ class DataPokokImportController extends Controller
             'NRP_FULL' => 'NRP_FULL',
             'TEMPATLHR' => 'TEMPATLHR',
         ];
+    }
 
-        (new FastExcel)->import($filePath, function ($line) use ($fieldMapping) {
+    /**
+     * Execute the job.
+     */
+    public function handle(): void
+    {
+        foreach ($this->chunk as $row) {
             // Map Excel fields to database fields
             $mappedRow = [];
-            foreach ($fieldMapping as $excelField => $dbField) {
-                $mappedRow[$dbField] = !empty($line[$excelField]) ? $line[$excelField] : null;
+            foreach ($this->fieldMapping as $excelField => $dbField) {
+                $mappedRow[$dbField] = !empty($row[$excelField]) ? $row[$excelField] : null;
             }
 
-            // Handle datetime fields and other data
+            // Handle datetime fields
             $mappedRow['TMTPenyesuaian'] = !empty($mappedRow['TMTPenyesuaian']) ? Carbon::parse($mappedRow['TMTPenyesuaian']) : null;
             $mappedRow['TMTTNI'] = !empty($mappedRow['TMTTNI']) ? Carbon::parse($mappedRow['TMTTNI']) : null;
             $mappedRow['TanggalLahir'] = !empty($mappedRow['TanggalLahir']) ? Carbon::parse($mappedRow['TanggalLahir']) : null;
@@ -149,8 +148,11 @@ class DataPokokImportController extends Controller
             $mappedRow['TanggalBuat'] = !empty($mappedRow['TanggalBuat']) ? Carbon::parse($mappedRow['TanggalBuat']) : null;
             $mappedRow['TanggalEdit'] = !empty($mappedRow['TanggalEdit']) ? Carbon::parse($mappedRow['TanggalEdit']) : null;
 
-            // Insert or update the record
-            DataPokok::updateOrCreate(['NRP' => $mappedRow['NRP']], $mappedRow);
-        });
+            // Insert or update the data in the DataPokok model
+            DataPokok::updateOrInsert(
+                ['NRP' => $mappedRow['NRP']], // Assuming 'NRP' is the unique identifier
+                $mappedRow
+            );
+        }
     }
 }
