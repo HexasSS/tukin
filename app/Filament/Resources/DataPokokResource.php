@@ -26,6 +26,8 @@ class DataPokokResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\TextInput::make('NRP')
+                    ->numeric(),
                 Forms\Components\TextInput::make('Nama')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('Pangkat')
@@ -97,7 +99,7 @@ class DataPokokResource extends Resource
             ])
             ->columns([
                 Tables\Columns\TextColumn::make('NRP')
-                    ->label('NRP')
+                    ->label('NRP/NIP')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('Nama')
                     ->searchable(),
