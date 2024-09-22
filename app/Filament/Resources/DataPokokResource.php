@@ -30,14 +30,11 @@ class DataPokokResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('Pangkat')
                     ->numeric(),
-                Forms\Components\TextInput::make('PangkatTituler')
-                    ->maxLength(255),
                 Forms\Components\TextInput::make('KelompokDPP')
                     ->numeric(),
                 Forms\Components\TextInput::make('AsalMasukan')
                     ->numeric(),
                 Forms\Components\DateTimePicker::make('TMTTNI'),
-                Forms\Components\DateTimePicker::make('TMTPenyesuaian'),
                 Forms\Components\TextInput::make('SatJuruBayar')
                     ->maxLength(255),
                 Forms\Components\DateTimePicker::make('TanggalLahir'),
@@ -53,10 +50,6 @@ class DataPokokResource extends Resource
                     ->numeric(),
                 Forms\Components\TextInput::make('Korps')
                     ->numeric(),
-                Forms\Components\TextInput::make('UnitOrganisasi')
-                    ->numeric(),
-                Forms\Components\TextInput::make('Kotama')
-                    ->numeric(),
                 Forms\Components\TextInput::make('StatJabatan')
                     ->numeric(),
                 Forms\Components\TextInput::make('JenisJabatan')
@@ -70,103 +63,13 @@ class DataPokokResource extends Resource
                 Forms\Components\TextInput::make('NamaJabatan')
                     ->maxLength(255),
                 Forms\Components\DateTimePicker::make('TMTJabatan'),
-                Forms\Components\TextInput::make('Skorsing')
-                    ->numeric(),
-                Forms\Components\TextInput::make('Kotji')
-                    ->numeric(),
-                Forms\Components\TextInput::make('GantiRugi')
-                    ->numeric(),
                 Forms\Components\TextInput::make('SewaRumah')
                     ->numeric(),
-                Forms\Components\TextInput::make('TunPeralihan')
-                    ->numeric(),
-                Forms\Components\TextInput::make('BulanWarakawuri')
-                    ->numeric(),
-                Forms\Components\TextInput::make('SatOrganik')
-                    ->maxLength(255),
                 Forms\Components\TextInput::make('Pekas')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('Satker')
-                    ->maxLength(255),
-                Forms\Components\DateTimePicker::make('TanggalBuat'),
-                Forms\Components\DateTimePicker::make('TanggalEdit'),
-                Forms\Components\TextInput::make('BuatOleh')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('EditOleh')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('BulanKumulatif')
-                    ->numeric(),
-                Forms\Components\TextInput::make('TotalBulan')
-                    ->numeric(),
-                Forms\Components\TextInput::make('Gapok_KL')
-                    ->numeric(),
-                Forms\Components\TextInput::make('Gapok_K')
-                    ->numeric(),
-                Forms\Components\TextInput::make('TunKeluarga_KL')
-                    ->numeric(),
-                Forms\Components\TextInput::make('TunKeluarga_K')
-                    ->numeric(),
-                Forms\Components\TextInput::make('TunKhusus_KL')
-                    ->numeric(),
-                Forms\Components\TextInput::make('TunKhusus_K')
-                    ->numeric(),
-                Forms\Components\TextInput::make('TunLain_KL')
-                    ->numeric(),
-                Forms\Components\TextInput::make('TunLain_K')
-                    ->numeric(),
-                Forms\Components\TextInput::make('SilBruto_KL')
-                    ->numeric(),
-                Forms\Components\TextInput::make('SilBruto_K')
-                    ->numeric(),
-                Forms\Components\TextInput::make('PenBruto_KL')
-                    ->numeric(),
-                Forms\Components\TextInput::make('PenBruto_K')
-                    ->numeric(),
-                Forms\Components\TextInput::make('BJab_KL')
-                    ->numeric(),
-                Forms\Components\TextInput::make('BJab_K')
-                    ->numeric(),
-                Forms\Components\TextInput::make('Ipen_KL')
-                    ->numeric(),
-                Forms\Components\TextInput::make('Ipen_K')
-                    ->numeric(),
-                Forms\Components\TextInput::make('PTKP_KL')
-                    ->numeric(),
-                Forms\Components\TextInput::make('PTKP_K')
-                    ->numeric(),
-                Forms\Components\TextInput::make('PKP_KL')
-                    ->numeric(),
-                Forms\Components\TextInput::make('PKP_K')
-                    ->numeric(),
-                Forms\Components\TextInput::make('PPHTerhutang_KL')
-                    ->numeric(),
-                Forms\Components\TextInput::make('PPHTerhutang_K')
-                    ->numeric(),
-                Forms\Components\TextInput::make('PPHSetor_KL')
-                    ->numeric(),
-                Forms\Components\TextInput::make('PPHSetor_K')
-                    ->numeric(),
-                Forms\Components\TextInput::make('SilTakTeratur_KL')
-                    ->numeric(),
-                Forms\Components\TextInput::make('SilTakTeratur_K')
-                    ->numeric(),
-                Forms\Components\TextInput::make('PPHTakTeratur_KL')
-                    ->numeric(),
-                Forms\Components\TextInput::make('PPHTakTeratur_K')
-                    ->numeric(),
-                Forms\Components\TextInput::make('StIrja')
-                    ->numeric(),
-                Forms\Components\TextInput::make('GapokLama')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('Kd_pkt_gol')
-                    ->numeric(),
                 Forms\Components\TextInput::make('Gapok')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('TGrade')
-                    ->numeric(),
-                Forms\Components\TextInput::make('Tperbatasan')
-                    ->numeric(),
-                Forms\Components\TextInput::make('TWP')
                     ->numeric(),
                 Forms\Components\TextInput::make('KdSatker')
                     ->maxLength(255),
@@ -181,46 +84,6 @@ class DataPokokResource extends Resource
                 Forms\Components\TextInput::make('NAMA_BANK')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('NO_REK')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('SANDI')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('KD_BANK_SPAN')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('KD_SWIFT')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('KD_POS')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('KD_NEGARA')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('KD_KPPN')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('TIPE_SUP')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('KOTA')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('PROV')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('EMAIL')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('TELEPON')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('KD_IBAN')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('ALAMAT')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('KD_NAB')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('KD_LOKASI')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('KD_KABKOTA')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('NRS')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('KDJAB')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('NRP_FULL')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('TEMPATLHR')
                     ->maxLength(255),
             ]);
     }
@@ -477,38 +340,14 @@ class DataPokokResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('KOTA')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('PROV')
+                Tables\Columns\TextColumn::make('PROVINSI')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('EMAIL')
+                Tables\Columns\TextColumn::make('NEGARA')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('TELEPON')
+                Tables\Columns\TextColumn::make('KODE_NEGARA')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('KD_IBAN')
+                Tables\Columns\TextColumn::make('KET')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('ALAMAT')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('KD_NAB')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('KD_LOKASI')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('KD_KABKOTA')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('NRS')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('KDJAB')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('NRP_FULL')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('TEMPATLHR')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
@@ -516,16 +355,10 @@ class DataPokokResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ExportBulkAction::make()
-                        ->exporter(DataPokokExporter::class)
-                        ->formats([
-                            ExportFormat::Xlsx,
-                        ]),
-                ]),
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 
