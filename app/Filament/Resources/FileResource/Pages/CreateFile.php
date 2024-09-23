@@ -3,7 +3,8 @@
 namespace App\Filament\Resources\FileResource\Pages;
 
 use App\Filament\Resources\FileResource;
-use App\Jobs\ProcessExcelImport;
+use App\Http\Controllers;
+use App\Http\Controllers\DataPokokImportController;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Storage;
 
@@ -24,7 +25,8 @@ class CreateFile extends CreateRecord
             $fullPath = Storage::disk('local')->path($filePath);
 
             // Dispatch the job to process the file
-            ProcessExcelImport::dispatch($fullPath);
+            $controller = new DataPokokImportController();
+            $controller->importFile($fullPath);
         }
 
         return $file;

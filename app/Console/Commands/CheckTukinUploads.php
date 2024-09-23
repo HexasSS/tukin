@@ -17,11 +17,11 @@ class CheckTukinUploads extends Command
     public function handle()
     {
         $admins = User::where('role', 'admin')->get();
-        $currentMonth = Carbon::now()->format('Y-m');
+        $lastMonth = Carbon::now()->subMonth()->format('Y-m');
 
         foreach ($admins as $admin) {
             $hasUploaded = File::where('user_id', $admin->id)
-                ->where('created_at', 'like', "$currentMonth%")
+                ->where('created_at', 'like', "$lastMonth%")
                 ->exists();
 
             if (!$hasUploaded) {

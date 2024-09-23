@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\FileResource\Pages;
+use Filament\Actions\CreateAction;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -11,7 +12,6 @@ use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
 use App\Models\JuruBayar;
 use App\Models\File;
-use App\Jobs\ProcessExcelImport;
 
 class FileResource extends Resource
 {
@@ -40,11 +40,10 @@ class FileResource extends Resource
                     ->required()
                     ->default(fn() => Auth::user()->role === 'admin' ? Auth::user()->sat_juru_bayar_id : null),
 
-                Forms\Components\DateTimePicker::make('uploaded_at')
-                    ->label('Uploaded At')
+                Forms\Components\DatePicker::make('uploaded_at')
+                    ->label('Periode')
                     ->default(now())
                     ->required()
-                    ->readonly(fn() => Auth::user()->role === 'admin'),
             ]);
     }
 
@@ -54,7 +53,7 @@ class FileResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('file_path')->searchable(),
-                Tables\Columns\TextColumn::make('uploaded_at')->dateTime()->sortable(),
+                Tables\Columns\TextColumn::make('uploaded_at')->label('Periode')->dateTime('Y-m')->sortable(),
                 Tables\Columns\TextColumn::make('user.name')->label('Uploaded by')->sortable(),
                 Tables\Columns\TextColumn::make('sat_juru_bayar')->label('Juru Bayar')->searchable(),
             ])

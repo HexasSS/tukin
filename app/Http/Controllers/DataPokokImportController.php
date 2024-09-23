@@ -21,11 +21,11 @@ class DataPokokImportController extends Controller
         // Import the file
         $this->importFile(storage_path('app/' . $filePath));
 
-        return redirect()->route('files.index')->with('success', 'File imported successfully!');
+        return redirect()->route('/admin/data-pokoks')->with('success', 'File imported successfully!');
     }
 
 
-    private function importFile($filePath)
+    public function importFile($filePath)
     {
         // dd($filePath);
         // Define the field mapping between Excel and database
