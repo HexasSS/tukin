@@ -18,6 +18,7 @@ class UserResource extends Resource
     protected static ?string $model = User::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationLabel = 'Pengguna';
     public static function canViewAny(): bool
     {
         return auth()->user()->role === 'superadmin'; // Only allow 'admin' role to view this resource

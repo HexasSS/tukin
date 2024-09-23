@@ -18,7 +18,7 @@ class JuruBayarResource extends Resource
     protected static ?string $model = JuruBayar::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $navigationLabel = 'Juru Bayar';
     public static function form(Form $form): Form
     {
         return $form
