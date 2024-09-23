@@ -72,7 +72,8 @@ class JuruBayarResource extends Resource
                     ->getStateUsing(function (JuruBayar $record) {
                         // Check if the JuruBayar has uploaded a file this month
                         return $record->files()
-                            ->whereMonth('uploaded_at', now()->month)
+                            ->whereMonth('uploaded_at', now()->subMonth()->month)  // Last month
+                            ->whereYear('uploaded_at', now()->subMonth()->year)    // Ensure it's the correct year as well
                             ->exists();
                     })
                     ->disabled(),
