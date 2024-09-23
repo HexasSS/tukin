@@ -3,28 +3,42 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
+use App\Models\User;
+use App\Models\File;
+use Carbon\Carbon;
 
 class CheckTukinUploads extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'app:check-tukin-uploads';
+    protected $signature = 'check:tukin-uploads';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Command description';
+    protected $description = 'Memeriksa apakah admin telah mengunggah tukin untuk bulan ini dan mengirimkan notifikasi email jika belum.';
 
-    /**
-     * Execute the console command.
-     */
     public function handle()
     {
-        //
+        $admins = User::where('role', 'admin')->get();
+        $currentMonth = Carbon::now()->format('Y-m');
+
+        foreach ($admins as $admin) {
+            $hasUploaded = File::where('user_id', $admin->id)
+                ->where('created_at', 'like', "$currentMonth%")
+                ->exists();
+
+            if (!$hasUploaded) {
+                $this->sendEmailReminder($admin);
+            }
+        }
+
+        $this->info('Pemeriksaan selesai dan email dikirim jika diperlukan.');
+    }
+
+    protected function sendEmailReminder($admin)
+    {
+        $details = [
+            'title' => 'Pengingat: Unggah Tukin Diperlukan',
+            'body' => 'Yth. Admin, Anda belum mengunggah tukin untuk bulan ini. Mohon segera mengunggahnya.'
+        ];
+
+        Mail::to($admin->email)->send(new \App\Mail\TukinReminder($details));
     }
 }
