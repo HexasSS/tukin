@@ -21,7 +21,11 @@ class DataPokokResource extends Resource
     protected static ?string $model = DataPokok::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $navigationLabel = 'Data Pokok';
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->role === 'superadmin'; // Only allow 'admin' role to view this resource
+    }
     public static function form(Form $form): Form
     {
         return $form
