@@ -64,6 +64,10 @@ class FileResource extends Resource
                     // ->icon('typ-download') // Optional icon
                     ->url(fn(File $record) => route('files.download', $record))
                     ->color('primary'),
+                Tables\Actions\DeleteAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 
