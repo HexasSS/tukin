@@ -21,9 +21,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::resource('files', FileController::class);
-Route::get('/files/{file}/download', [FileController::class, 'download'])->name('files.download');
-
 Route::post('/data-pokoks/import', [DataPokokImportController::class, 'store'])->name('data_pokoks.import');
 Route::get('/data-pokoks/import', function () {
     return view('data_pokoks.import');
