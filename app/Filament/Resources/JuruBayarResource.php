@@ -67,8 +67,9 @@ class JuruBayarResource extends Resource
                     ->label('Nama Sat Juru Bayar')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\CheckboxColumn::make('has_uploaded')
+                Tables\Columns\IconColumn::make('has_uploaded')
                     ->label('Sudah Upload')
+                    ->boolean()
                     ->getStateUsing(function (JuruBayar $record) {
                         // Check if the JuruBayar has uploaded a file this month
                         return $record->files()

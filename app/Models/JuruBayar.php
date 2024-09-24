@@ -37,4 +37,8 @@ class JuruBayar extends Model
     {
         return $this->hasMany(File::class, 'sat_juru_bayar', 'sat_juru_bayar');
     }
+    public function dataPokoks()
+    {
+        return $this->hasMany(DataPokok::class, 'satjurubayar', 'sat_juru_bayar');
+    }
 }

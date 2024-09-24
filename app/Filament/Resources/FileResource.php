@@ -55,7 +55,9 @@ class FileResource extends Resource
                 Tables\Columns\TextColumn::make('file_path')->searchable(),
                 Tables\Columns\TextColumn::make('uploaded_at')->label('Periode')->dateTime('Y-m')->sortable(),
                 Tables\Columns\TextColumn::make('user.name')->label('Uploaded by')->sortable(),
-                Tables\Columns\TextColumn::make('sat_juru_bayar')->label('Juru Bayar')->searchable(),
+                Tables\Columns\TextColumn::make('juruBayar.nama_sat_juru_bayar')
+                    ->label('Nama Juru Bayar')
+                    ->searchable(),
             ])
             ->actions([
                 Tables\Actions\Action::make('download')
