@@ -27,7 +27,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->brandName('Sinkro TunKin')
+            ->brandName('Sinkronisasi TunKin')
             ->login()
             ->colors([
                 'primary' => Color::Sky,

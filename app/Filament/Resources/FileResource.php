@@ -12,6 +12,8 @@ use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
 use App\Models\JuruBayar;
 use App\Models\File;
+use Illuminate\Database\Eloquent\Builder;
+
 
 class FileResource extends Resource
 {
@@ -59,6 +61,19 @@ class FileResource extends Resource
                     ->label('Nama Juru Bayar')
                     ->searchable(),
             ])
+            ->modifyQueryUsing(function (Builder $query) {
+                // Modify the query based on the user's role
+                if (auth()->user()->role === 'superadmin') {
+                    // Admin sees all records
+                    return $query;
+                } elseif (auth()->user()->role === 'admin') {
+                    // User sees only their associated records
+                    return $query->where('sat_juru_bayar', auth()->user()->sat_juru_bayar_id);
+                }
+
+                // Optional: Return the query as-is if the role is neither admin nor user
+                return $query;
+            })
             ->actions([
                 Tables\Actions\Action::make('download')
                     ->label('Download')

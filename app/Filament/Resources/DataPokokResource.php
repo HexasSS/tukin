@@ -109,18 +109,18 @@ class DataPokokResource extends Resource
                 Forms\Components\TextInput::make('NO_REK')
                     ->label('No. Rek')
                     ->maxLength(255),
-                Tables\Columns\TextColumn::make('SANDI')
+                Forms\Components\TextInput::make('SANDI')
                     ->label('Sandi')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('KD_BANK_SPAN')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('KD_BANK_SPAN')
                     ->label('Kode Bank Span')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('TELEPON')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('TELEPON')
                     ->label('Telepon')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('TEMPATLHR')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('TEMPATLHR')
                     ->label('Tempat Lahir')
-                    ->searchable(),
+                    ->maxLength(255),
             ]);
     }
 
@@ -215,10 +215,13 @@ class DataPokokResource extends Resource
                 Tables\Columns\TextColumn::make('MKG')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('NPWP')
+                    ->label('NPWP')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('NAMA_REK')
+                    ->label('Nama Rekening')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('NAMA_BANK')
+                    ->label('Nama Bank')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('NO_REK')
                     ->searchable(),
@@ -228,22 +231,25 @@ class DataPokokResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('Telepon')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('TempatLahir')
+                Tables\Columns\TextColumn::make('TEMPATLHR')
+                    ->label('Tempat Lahir')
                     ->searchable(),
             ])
+            ->modifyQueryUsing(function (Builder $query) {
+                // Modify the query based on the user's role
+                if (auth()->user()->role === 'superadmin') {
+                    // Admin sees all records
+                    return $query;
+                } elseif (auth()->user()->role === 'admin') {
+                    // User sees only their associated records
+                    return $query->where('satjurubayar', auth()->user()->sat_juru_bayar_id);
+                }
+
+                // Optional: Return the query as-is if the role is neither admin nor user
+                return $query;
+            })
             ->filters([
-                SelectFilter::make('satjurubayar')
-                    ->label('Sat Juru Bayar')
-                    ->options(function () {
-                        // Superadmin can see all juru bayar
-                        if (Auth::user()->role === 'superadmin') {
-                            return JuruBayar::pluck('nama_sat_juru_bayar', 'sat_juru_bayar');
-                        }
-                        // Admin can see only their associated juru bayar
-                        return JuruBayar::where('sat_juru_bayar', Auth::user()->sat_juru_bayar_id)
-                            ->pluck('nama_sat_juru_bayar', 'sat_juru_bayar');
-                    })
-                    ->default(Auth::user()->role === 'admin' ? Auth::user()->sat_juru_bayar_id : null),
+                //
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

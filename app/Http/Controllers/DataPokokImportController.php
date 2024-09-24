@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Rap2hpoutre\FastExcel\FastExcel;
 use App\Models\DataPokok;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class DataPokokImportController extends Controller
 {
@@ -134,23 +135,40 @@ class DataPokokImportController extends Controller
             'TEMPATLHR' => 'TEMPATLHR',
         ];
 
-        (new FastExcel)->import($filePath, function ($line) use ($fieldMapping) {
-            // Map Excel fields to database fields
-            $mappedRow = [];
-            foreach ($fieldMapping as $excelField => $dbField) {
-                $mappedRow[$dbField] = !empty($line[$excelField]) ? $line[$excelField] : null;
-            }
+        try {
+            (new FastExcel)->import($filePath, function ($line) use ($fieldMapping) {
+                // Map Excel fields to database fields
+                $mappedRow = [];
+                foreach ($fieldMapping as $excelField => $dbField) {
+                    $mappedRow[$dbField] = !empty($line[$excelField]) ? $line[$excelField] : null;
+                }
 
-            // Handle datetime fields and other data
-            $mappedRow['TMTPenyesuaian'] = !empty($mappedRow['TMTPenyesuaian']) ? Carbon::parse($mappedRow['TMTPenyesuaian']) : null;
-            $mappedRow['TMTTNI'] = !empty($mappedRow['TMTTNI']) ? Carbon::parse($mappedRow['TMTTNI']) : null;
-            $mappedRow['TanggalLahir'] = !empty($mappedRow['TanggalLahir']) ? Carbon::parse($mappedRow['TanggalLahir']) : null;
-            $mappedRow['TMTJabatan'] = !empty($mappedRow['TMTJabatan']) ? Carbon::parse($mappedRow['TMTJabatan']) : null;
-            $mappedRow['TanggalBuat'] = !empty($mappedRow['TanggalBuat']) ? Carbon::parse($mappedRow['TanggalBuat']) : null;
-            $mappedRow['TanggalEdit'] = !empty($mappedRow['TanggalEdit']) ? Carbon::parse($mappedRow['TanggalEdit']) : null;
+                // Log raw data for debugging
+                Log::info('Raw Row Data:', $mappedRow);
 
-            // Insert or update the record
-            DataPokok::updateOrCreate(['NRP' => $mappedRow['NRP']], $mappedRow);
-        });
+                $parseDate = function ($date) {
+                    // Check if the date is already a DateTimeImmutable or similar
+                    if ($date instanceof \DateTimeImmutable || $date instanceof \DateTime) {
+                        return $date; // Return it as is
+                    }
+
+                    // Parse string dates
+                    return !empty($date) ? Carbon::createFromFormat('d/m/Y H:i:s', str_replace(',000', '', $date)) : null;
+                };
+
+                // Handle datetime fields and other data
+                $mappedRow['TMTPenyesuaian'] = $parseDate($mappedRow['TMTPenyesuaian']);
+                $mappedRow['TMTTNI'] = $parseDate($mappedRow['TMTTNI']);
+                $mappedRow['TanggalLahir'] = $parseDate($mappedRow['TanggalLahir']);
+                $mappedRow['TMTJabatan'] = $parseDate($mappedRow['TMTJabatan']);
+                $mappedRow['TanggalBuat'] = $parseDate($mappedRow['TanggalBuat']);
+                $mappedRow['TanggalEdit'] = $parseDate($mappedRow['TanggalEdit']);
+                // Insert or update the record
+                DataPokok::updateOrCreate(['NRP' => $mappedRow['NRP']], $mappedRow);
+            });
+        } catch (\Exception $e) {
+            Log::error('Import failed: ' . $e->getMessage());
+            // Optionally, throw an exception or return a response indicating failure
+        }
     }
 }
