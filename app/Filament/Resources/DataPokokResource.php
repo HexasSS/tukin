@@ -15,13 +15,20 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Exports\DataPokokExporter;
 use Filament\Tables\Actions\ExportAction;
 use Filament\Actions\Exports\Enums\ExportFormat;
+use App\Models\JuruBayar;
+use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Support\Facades\Auth; // Make sure this line is present
 
 class DataPokokResource extends Resource
 {
     protected static ?string $model = DataPokok::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationLabel = 'Data Pokok';
+
+    // public static function canViewAny(): bool
+    // {
+    //     return auth()->user()->role === 'superadmin'; // Only allow 'admin' role to view this resource
+    // }
     public static function form(Form $form): Form
     {
         return $form
@@ -225,7 +232,18 @@ class DataPokokResource extends Resource
                     ->searchable(),
             ])
             ->filters([
-                //
+                SelectFilter::make('satjurubayar')
+                    ->label('Sat Juru Bayar')
+                    ->options(function () {
+                        // Superadmin can see all juru bayar
+                        if (Auth::user()->role === 'superadmin') {
+                            return JuruBayar::pluck('nama_sat_juru_bayar', 'sat_juru_bayar');
+                        }
+                        // Admin can see only their associated juru bayar
+                        return JuruBayar::where('sat_juru_bayar', Auth::user()->sat_juru_bayar_id)
+                            ->pluck('nama_sat_juru_bayar', 'sat_juru_bayar');
+                    })
+                    ->default(Auth::user()->role === 'admin' ? Auth::user()->sat_juru_bayar_id : null),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
