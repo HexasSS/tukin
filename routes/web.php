@@ -4,9 +4,11 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\DataPokokImportController;
+use App\Http\Controllers\ImportController;
+use Filament\Actions\CreateAction;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/admin');
 });
 
 Route::get('/dashboard', function () {
@@ -19,14 +21,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::resource('files', FileController::class);
-Route::get('/files/{file}/download', [FileController::class, 'download'])->name('files.download');
-
 Route::post('/data-pokoks/import', [DataPokokImportController::class, 'store'])->name('data_pokoks.import');
 Route::get('/data-pokoks/import', function () {
     return view('data_pokoks.import');
 })->name('data_pokoks.import.form');
 Route::post('/data-pokoks/store', [DataPokokImportController::class, 'store'])->name('data-pokoks.store');
 
+Route::get('/import-progress', [ImportController::class, 'progress']);
+
+Route::get('/files/{file}/download', [FileController::class, 'download'])->name('files.download');
 
 require __DIR__ . '/auth.php';

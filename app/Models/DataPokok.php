@@ -18,6 +18,10 @@ class DataPokok extends Model
         'TanggalEdit' => 'datetime',
     ];
 
+    protected $primaryKey = 'NRP'; // Specify the primary key column name
+    public $incrementing = false;  // Set to false if the primary key is not auto-incrementing
+    protected $keyType = 'string'; // Set to 'string' if the primary key is a string
+
     protected $fillable = [
         'NRP',
         'Nama',

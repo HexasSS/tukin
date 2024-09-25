@@ -10,6 +10,13 @@ class JuruBayar extends Model
 {
     use HasFactory;
 
+    // Declare the custom primary key if it's not 'id'
+    protected $primaryKey = 'sat_juru_bayar';
+
+    // If the primary key is not an auto-incrementing integer, specify this
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
         'sat_juru_bayar',
         'nama_sat_juru_bayar',
@@ -29,5 +36,9 @@ class JuruBayar extends Model
     public function files()
     {
         return $this->hasMany(File::class, 'sat_juru_bayar', 'sat_juru_bayar');
+    }
+    public function dataPokoks()
+    {
+        return $this->hasMany(DataPokok::class, 'satjurubayar', 'sat_juru_bayar');
     }
 }
