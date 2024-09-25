@@ -8,7 +8,7 @@ use App\Http\Controllers\ImportController;
 use Filament\Actions\CreateAction;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/admin');
 });
 
 Route::get('/dashboard', function () {
