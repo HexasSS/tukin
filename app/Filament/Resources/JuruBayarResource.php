@@ -19,6 +19,11 @@ class JuruBayarResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationLabel = 'Juru Bayar';
+
+    public static function canViewAny(): bool
+        {
+            return auth()->user()->role === 'superadmin'; // Only allow 'superadmin' role to view this resource
+        }
     public static function form(Form $form): Form
     {
         return $form
