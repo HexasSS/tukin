@@ -13,6 +13,10 @@ class ListFiles extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            Actions\Action::make('template')
+                ->label('Unduh Template')
+                ->url(asset('storage/000000P1 Template Upload Tunkin.xlsx')) // Use the storage path
+                ->color('success'),
             Actions\CreateAction::make(),
         ];
     }

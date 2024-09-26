@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\FileResource\Pages;
-use Filament\Actions\CreateAction;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -14,13 +13,13 @@ use App\Models\JuruBayar;
 use App\Models\File;
 use Illuminate\Database\Eloquent\Builder;
 
-
 class FileResource extends Resource
 {
     protected static ?string $model = File::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationLabel = 'Berkas';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -45,10 +44,9 @@ class FileResource extends Resource
                 Forms\Components\DatePicker::make('uploaded_at')
                     ->label('Periode')
                     ->default(now()->subMonth())
-                    ->required()
+                    ->required(),
             ]);
     }
-
 
     public static function table(Table $table): Table
     {
@@ -62,22 +60,17 @@ class FileResource extends Resource
                     ->searchable(),
             ])
             ->modifyQueryUsing(function (Builder $query) {
-                // Modify the query based on the user's role
                 if (auth()->user()->role === 'superadmin') {
-                    // Admin sees all records
                     return $query;
                 } elseif (auth()->user()->role === 'admin') {
-                    // User sees only their associated records
                     return $query->where('sat_juru_bayar', auth()->user()->sat_juru_bayar_id);
                 }
 
-                // Optional: Return the query as-is if the role is neither admin nor user
                 return $query;
             })
             ->actions([
                 Tables\Actions\Action::make('download')
                     ->label('Download')
-                    // ->icon('typ-download') // Optional icon
                     ->url(fn(File $record) => route('files.download', $record))
                     ->color('primary'),
                 Tables\Actions\DeleteAction::make(),
