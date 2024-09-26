@@ -43,7 +43,6 @@ class UserResource extends Resource
                     ->required()
                     ->password()
                     ->maxLength(255)
-                    ->visibleOn('create') // Password should be visible only on create form
                     ->dehydrateStateUsing(fn($state) => bcrypt($state)) // Hash the password before storing it
                     ->dehydrated(fn($state) => filled($state)), // Only store password if it's set (for updates),
 
