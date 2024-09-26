@@ -123,8 +123,9 @@ class DataPokokResource extends Resource
     {
         return $table
             ->headerActions([
-                ExportAction::make()
+                ExportAction::make('export')
                     ->exporter(DataPokokExporter::class)
+                    ->label('Export Data')
             ])
             ->columns([
                 Tables\Columns\TextColumn::make('NRP')

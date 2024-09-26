@@ -6,6 +6,9 @@ use App\Models\DataPokok;
 use Filament\Actions\Exports\ExportColumn;
 use Filament\Actions\Exports\Exporter;
 use Filament\Actions\Exports\Models\Export;
+use Filament\Actions\Exports\Enums\ExportFormat;
+use Filament\Notifications\Notification;
+use Illuminate\Notifications\Notifiable;
 
 class DataPokokExporter extends Exporter
 {
@@ -123,11 +126,15 @@ class DataPokokExporter extends Exporter
 
     public static function getCompletedNotificationBody(Export $export): string
     {
-        $body = 'Your data pokok export has completed and ' . number_format($export->successful_rows) . ' ' . str('row')->plural($export->successful_rows) . ' exported.';
+        // Custom notification logic
+        $body = 'Your data pokok export has completed and ' . number_format($export->successful_rows) . ' rows exported.';
 
-        if ($failedRowsCount = $export->getFailedRowsCount()) {
-            $body .= ' ' . number_format($failedRowsCount) . ' ' . str('row')->plural($failedRowsCount) . ' failed to export.';
-        }
+        // Send notification
+        Notification::make()
+            ->title('Export Complete')
+            ->success()
+            ->body($body)
+            ->sendTo($export->user);
 
         return $body;
     }
