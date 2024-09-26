@@ -44,7 +44,7 @@ class FileResource extends Resource
 
                 Forms\Components\DatePicker::make('uploaded_at')
                     ->label('Periode')
-                    ->default(now())
+                    ->default(now()->subMonth())
                     ->required()
             ]);
     }
